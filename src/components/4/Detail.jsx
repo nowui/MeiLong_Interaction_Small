@@ -40,6 +40,10 @@ class Detail extends Component {
         self.setState({
           list: data
         })
+
+        self.onClickMenu(0)
+
+        self.onClickSubMenu(data[0].sonlist[0].id)
       },
       complete: function() {
         self.setState({

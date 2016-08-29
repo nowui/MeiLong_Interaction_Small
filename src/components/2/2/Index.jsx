@@ -30,6 +30,8 @@ class Detail extends Component {
       self.setState({
         list: list
       })
+
+      self.onClickMenu(list[0].id)
     }
   }
 
@@ -49,6 +51,8 @@ class Detail extends Component {
         self.setState({
           list: data
         })
+
+        self.onClickMenu(data[0].id)
       },
       complete: function() {
         self.setState({

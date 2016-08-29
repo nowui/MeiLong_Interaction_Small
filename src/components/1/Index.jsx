@@ -61,7 +61,7 @@ class Index extends Component {
     this.props.socket.emit('push', '/1/detail/' + item.id)
 
     self.props.router.push({
-      pathname: '/1/detail/' + item.id + '/' + encodeURIComponent(item.picture),
+      pathname: '/1/detail/' + item.id,
       query: {
 
       }

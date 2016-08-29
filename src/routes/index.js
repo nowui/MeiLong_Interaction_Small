@@ -33,7 +33,7 @@ const Routes = ({ history }) =>
         <Route path="0/2/index" component={Component02Index}></Route>
         <Route path="0/2/detail/:id" component={Component02Detail}></Route>
         <Route path="1/index" component={Component1Index}></Route>
-        <Route path="1/detail/:id/:image" component={Component1Detail}></Route>
+        <Route path="1/detail/:id" component={Component1Detail}></Route>
         <Route path="2/index" component={Component2Index}></Route>
         <Route path="2/0/index" component={Component20Index}></Route>
         <Route path="2/1/index" component={Component21Index}></Route>
