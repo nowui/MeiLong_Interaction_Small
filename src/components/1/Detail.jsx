@@ -5,6 +5,9 @@ import Helper from '../../common/Helper'
 import styles from './Detail.less'
 
 let self
+let page = 1
+const limit = 8
+let list = []
 
 class Detail extends Component {
 
@@ -15,9 +18,8 @@ class Detail extends Component {
 
     this.state = {
       isLoad: false,
-      object: {
-        sonlist: []
-      }
+      object: {},
+      sonlist: []
     }
   }
 
@@ -30,6 +32,8 @@ class Detail extends Component {
       isLoad: true
     })
 
+    list = []
+
     Helper.ajax({
       url: '/services/djxmhPageContentML/' + self.props.params.id,
       data: {
@@ -40,8 +44,12 @@ class Detail extends Component {
           object: data
         })
 
+        list = data.sonlist
+
+        self.count()
+
         if(data.sonlist.length > 0) {
-          self.onClickSubMenu(data.sonlist[0].id)
+          self.onClickSubMenu(list[0].id)
         }
       },
       complete: function() {
@@ -52,14 +60,24 @@ class Detail extends Component {
     })
   }
 
-  onClickSubMenu(id) {
-    console.log({
-      id: self.props.params.id,
-      sId: id,
-      page: 1,
-      limit: 2
-    })
+  count() {
+  	let array = []
 
+    let start = (page - 1) * limit
+    let end = start + limit
+
+    for(let i = 0; i < list.length; i++) {
+    	if(i >= start && i < end) {
+    		array.push(list[i])
+    	}
+    }
+
+    self.setState({
+      sonlist: array
+    })
+  }
+
+  onClickSubMenu(id) {
     this.props.socket.emit('open', {
       id: self.props.params.id,
       sId: id,
@@ -88,6 +106,26 @@ class Detail extends Component {
     self.props.router.goBack()
   }
 
+  onClickLeft() {
+    event.preventDefault()
+
+    if(page > 1) {
+    	page--
+
+    	this.count()
+    }
+  }
+
+  onClickRight() {
+    event.preventDefault()
+
+    if(page < Math.ceil(list.length / limit)) {
+    	page++
+
+    	this.count()
+    }
+  }
+
   render() {
     return (
       <Spin size="large" spinning={this.state.isLoad}>
@@ -100,13 +138,15 @@ class Detail extends Component {
           </div>
           <div className={styles.list}>
             {
-              this.state.object.sonlist.map(function (item, index) {
+              this.state.sonlist.map(function (item, index) {
                 return (
                   <div key={index} className={styles.listItem} onClick={this.onClickSubMenu.bind(this, item.id)}>{item.name}</div>
                 )
               }.bind(this))
             }
           </div>
+          <div className={styles.menu_0} onClick={this.onClickLeft.bind(this)}></div>
+          <div className={styles.menu_1} onClick={this.onClickRight.bind(this)}></div>
           <div className={styles.back} onClick={this.onClickBack.bind(this)}></div>
         </div>
       </Spin>
