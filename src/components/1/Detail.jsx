@@ -106,7 +106,7 @@ class Detail extends Component {
     self.props.router.goBack()
   }
 
-  onClickLeft() {
+  onClickUp() {
     event.preventDefault()
 
     if(page > 1) {
@@ -116,7 +116,7 @@ class Detail extends Component {
     }
   }
 
-  onClickRight() {
+  onClickDown() {
     event.preventDefault()
 
     if(page < Math.ceil(list.length / limit)) {
@@ -124,6 +124,18 @@ class Detail extends Component {
 
     	this.count()
     }
+  }
+
+  onClickLeft() {
+    event.preventDefault()
+
+    this.props.socket.emit('up', '')
+  }
+
+  onClickRight() {
+    event.preventDefault()
+
+    this.props.socket.emit('down', '')
   }
 
   render() {
@@ -144,6 +156,10 @@ class Detail extends Component {
                 )
               }.bind(this))
             }
+          </div>
+          <div className={styles.button}>
+            <div className={styles.button_0} onClick={this.onClickUp.bind(this)}></div>
+            <div className={styles.button_1} onClick={this.onClickDown.bind(this)}></div>
           </div>
           <div className={styles.menu_0} onClick={this.onClickLeft.bind(this)}></div>
           <div className={styles.menu_1} onClick={this.onClickRight.bind(this)}></div>
