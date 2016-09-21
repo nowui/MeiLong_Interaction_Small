@@ -5,8 +5,9 @@ import Helper from '../../../common/Helper'
 import styles from './Index.less'
 
 let self
+let page = 1
+const limit = 8
 let list = []
-let count
 
 class Detail extends Component {
 
@@ -17,22 +18,12 @@ class Detail extends Component {
 
     this.state = {
       isLoad: false,
-      list: []
+      sonlist: []
     }
-
-    count = -1
   }
 
   componentDidMount() {
-    if(list.length == 0) {
-      self.load()
-    } else {
-      self.setState({
-        list: list
-      })
-
-      self.onClickMenu(list[0].id)
-    }
+    self.load()
   }
 
   load = function() {
@@ -48,11 +39,11 @@ class Detail extends Component {
       success: function(data) {
         list = data
 
-        self.setState({
-          list: data
-        })
+        self.count()
 
-        self.onClickMenu(data[0].id)
+        if(data.length > 0) {
+          self.onClickMenu(data[0].id)
+        }
       },
       complete: function() {
         self.setState({
@@ -60,6 +51,55 @@ class Detail extends Component {
         })
       }
     })
+  }
+
+  count() {
+    let array = []
+
+    let start = (page - 1) * limit
+    let end = start + limit
+
+    for(let i = 0; i < list.length; i++) {
+      if(i >= start && i < end) {
+        array.push(list[i])
+      }
+    }
+
+    self.setState({
+      sonlist: array
+    })
+  }
+
+  onClickUp() {
+    event.preventDefault()
+
+    if(page > 1) {
+      page--
+
+      this.count()
+    }
+  }
+
+  onClickDown() {
+    event.preventDefault()
+
+    if(page < Math.ceil(list.length / limit)) {
+      page++
+
+      this.count()
+    }
+  }
+
+  onClickLeft() {
+    event.preventDefault()
+
+    this.props.socket.emit('up', '')
+  }
+
+  onClickRight() {
+    event.preventDefault()
+
+    this.props.socket.emit('down', '')
   }
 
   onClickMenu(id) {
@@ -80,24 +120,12 @@ class Detail extends Component {
     return (
       <Spin size="large" spinning={this.state.isLoad}>
 	      <div className={styles.bg}>
-	      	<div className={styles.menu}>
+	      	<div className={styles.list}>
 	      		{
-	            this.state.list.map(function (item, index) {
-	            	if(index % 11 == 0) {
-	            		count++
-	            	}
+	            this.state.sonlist.map(function (item, index) {
 	              return (
-	              	<div key={index} >
-	              	{
-					            count % 2 == 0 ?
-			              	<div className={styles.menuItem0}>
-			              			<div className={styles.menuItemFont0} onClick={this.onClickMenu.bind(this, item.id)}>{item.personname}</div>
-			              	</div>
-			              	:
-			              	<div className={styles.menuItem1}>
-			              			<div className={styles.menuItemFont1} onClick={this.onClickMenu.bind(this, item.id)}>{item.personname}</div>
-			              	</div>
-					        }
+	              	<div key={index} className={styles.listItem} onClick={this.onClickMenu.bind(this, item.id)}>
+                    {item.personname}
 					        </div>
 	              )
 	            }.bind(this))
@@ -105,6 +133,12 @@ class Detail extends Component {
 	      	</div>
 	        <div className={styles.back} onClick={this.onClickBack.bind(this)}></div>
 	      </div>
+        <div className={styles.button}>
+          <div className={styles.button_0} onClick={this.onClickUp.bind(this)}></div>
+          <div className={styles.button_1} onClick={this.onClickDown.bind(this)}></div>
+        </div>
+        <div className={styles.menu_0} onClick={this.onClickLeft.bind(this)}></div>
+        <div className={styles.menu_1} onClick={this.onClickRight.bind(this)}></div>
       </Spin>
     )
   }

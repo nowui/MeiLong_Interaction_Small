@@ -164,6 +164,7 @@ class Detail extends Component {
           <div className={styles.menu_0} onClick={this.onClickLeft.bind(this)}></div>
           <div className={styles.menu_1} onClick={this.onClickRight.bind(this)}></div>
           <div className={styles.back} onClick={this.onClickBack.bind(this)}></div>
+          <div className={styles.case}></div>
         </div>
       </Spin>
     )
