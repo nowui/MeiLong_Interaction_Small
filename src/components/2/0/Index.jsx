@@ -73,6 +73,18 @@ class Detail extends Component {
     self.props.router.goBack()
   }
 
+  onClickLeft() {
+    event.preventDefault()
+
+    this.props.socket.emit('up', '')
+  }
+
+  onClickRight() {
+    event.preventDefault()
+
+    this.props.socket.emit('down', '')
+  }
+
   render() {
     return (
       <Spin size="large" spinning={this.state.isLoad}>
@@ -91,6 +103,8 @@ class Detail extends Component {
           </div>
           <div className={styles.back} onClick={this.onClickBack.bind(this)}></div>
         </div>
+        <div className={styles.menu_0} onClick={this.onClickLeft.bind(this)}></div>
+        <div className={styles.menu_1} onClick={this.onClickRight.bind(this)}></div>
       </Spin>
     )
   }
