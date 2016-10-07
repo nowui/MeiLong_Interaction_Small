@@ -68,7 +68,9 @@ class Detail extends Component {
   onClickBack() {
     event.preventDefault()
 
-    this.props.socket.emit('back', '')
+    //this.props.socket.emit('back', '')
+
+    this.props.socket.emit('push', '/2/index')
 
     self.props.router.goBack()
   }

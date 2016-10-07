@@ -73,7 +73,9 @@ class Index extends Component {
   onClickBack() {
     event.preventDefault()
 
-    this.props.socket.emit('back', '')
+    //this.props.socket.emit('back', '')
+
+    this.props.socket.emit('push', '/index')
 
     self.props.router.goBack()
   }
