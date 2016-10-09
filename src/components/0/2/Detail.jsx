@@ -28,6 +28,18 @@ class Detail extends Component {
     })
   }
 
+  onClickLeft() {
+    event.preventDefault()
+
+    this.props.socket.emit('up', '')
+  }
+
+  onClickRight() {
+    event.preventDefault()
+
+    this.props.socket.emit('down', '')
+  }
+
   onClickBack() {
     event.preventDefault()
 
@@ -53,6 +65,15 @@ class Detail extends Component {
         <div className={styles.menu_11} onClick={this.onClickMenu.bind(this, 11)}></div>
         <div className={styles.menu_12} onClick={this.onClickMenu.bind(this, 12)}></div>
         <div className={styles.menu_13} onClick={this.onClickMenu.bind(this, 13)}></div>
+        {
+        	self.props.params.id == 1 ?
+	        <div>
+		        <div className={styles.left} onClick={this.onClickLeft.bind(this)}></div>
+		        <div className={styles.right} onClick={this.onClickRight.bind(this)}></div>
+	        </div>
+	        :
+	        ''
+        }
         <div className={styles.back} onClick={this.onClickBack.bind(this)}></div>
       </div>
     )
