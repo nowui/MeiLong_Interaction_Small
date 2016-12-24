@@ -5,6 +5,8 @@ import Helper from '../../common/Helper'
 import styles from './Index.less'
 
 let self
+let page = 1
+const limit = 4
 let list = []
 
 class Index extends Component {
@@ -36,7 +38,7 @@ class Index extends Component {
     })
 
     Helper.ajax({
-      url: '/services/whytXpml/2',
+      url: '/services/whytXpml/2-' + page + '-' + limit,
       data: {
 
       },
@@ -68,6 +70,28 @@ class Index extends Component {
     })
   }
 
+  onClickUp() {
+    event.preventDefault()
+
+    if(page > 1) {
+      page--
+
+      this.load()
+    }
+  }
+
+  onClickDown() {
+    event.preventDefault()
+
+    console.log(Math.ceil(list.length / limit))
+
+    if(list.length == limit) {
+      page++
+
+      this.load()
+    }
+  }
+
   onClickBack() {
     event.preventDefault()
 
@@ -90,6 +114,10 @@ class Index extends Component {
               )
             }.bind(this))
           }
+          </div>
+          <div className={styles.button}>
+            <div className={styles.button_0} onClick={this.onClickUp.bind(this)}></div>
+            <div className={styles.button_1} onClick={this.onClickDown.bind(this)}></div>
           </div>
           <div className={styles.back} onClick={this.onClickBack.bind(this)}></div>
         </div>
