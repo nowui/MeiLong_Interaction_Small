@@ -7,7 +7,6 @@ import styles from './Index.less'
 let self
 let page = 1
 const limit = 4
-let list = []
 
 class Index extends Component {
 
@@ -18,18 +17,13 @@ class Index extends Component {
 
     this.state = {
       isLoad: false,
+      lastPage: true,
       list: []
     }
   }
 
   componentDidMount() {
-    if(list.length == 0) {
-      self.load()
-    } else {
-      self.setState({
-        list: list
-      })
-    }
+    self.load()
   }
 
   load = function() {
@@ -43,10 +37,9 @@ class Index extends Component {
 
       },
       success: function(data) {
-        list = data
-
         self.setState({
-          list: data
+          lastPage: data.lastPage,
+          list: data.list
         })
       },
       complete: function() {
@@ -83,9 +76,7 @@ class Index extends Component {
   onClickDown() {
     event.preventDefault()
 
-    console.log(Math.ceil(list.length / limit))
-
-    if(list.length == limit) {
+    if(! this.state.lastPage) {
       page++
 
       this.load()
